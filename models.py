@@ -157,12 +157,16 @@ class UserResumeManager:
     
     def get_user(self, user_id: str) -> Optional[UserProfile]:
         """获取用户信息"""
-        user_file = os.path.join(self.users_dir, f"{user_id}.json")
-        if os.path.exists(user_file):
-            with open(user_file, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-                return UserProfile(**data)
-        return None
+        try:
+            user_file = os.path.join(self.users_dir, f"{user_id}.json")
+            if os.path.exists(user_file):
+                with open(user_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    return UserProfile(**data)
+            return None
+        except Exception as e:
+            print(f"Error loading user {user_id}: {e}")
+            return None
     
     def update_user(self, profile: UserProfile) -> UserProfile:
         """更新用户信息"""

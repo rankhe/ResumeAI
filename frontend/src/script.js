@@ -23,6 +23,9 @@ const generateButtons = {
 
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', function() {
+    // 检查用户信息
+    checkUserProfile();
+    
     // 初始化标签页
     initTabs();
     
@@ -40,6 +43,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 绑定刷新按钮事件
     bindRefreshEvents();
+    
+    // 绑定用户信息相关事件
+    bindUserInfoEvents();
+    
+    // 初始化时启用所有生成按钮，因为上传简历不是必须的
+    Object.values(generateButtons).forEach(btn => {
+        if (btn) {
+            btn.disabled = false;
+        }
+    });
     
     // 绑定模态框关闭事件
     if (closeModal) {
@@ -164,11 +177,6 @@ async function handleResumeUpload() {
 async function handleDescriptionSubmit(event) {
     event.preventDefault();
     
-    if (!uploadedResume) {
-        showMessage('请先上传简历', 'error');
-        return;
-    }
-    
     const description = document.getElementById('job-description').value;
     
     if (!description) {
@@ -178,7 +186,16 @@ async function handleDescriptionSubmit(event) {
     
     const formData = new FormData();
     formData.append('description', description);
-    formData.append('resume', uploadedResume, uploadedResumeName);
+    
+    // 添加用户ID
+    const userId = getUserId();
+    if (userId) {
+        formData.append('user_id', userId);
+    }
+    
+    if (uploadedResume) {
+        formData.append('resume', uploadedResume, uploadedResumeName);
+    }
     
     await generateResume('/generate-by-description', formData, '职位描述');
 }
@@ -186,11 +203,6 @@ async function handleDescriptionSubmit(event) {
 // 处理职位链接表单提交
 async function handleUrlSubmit(event) {
     event.preventDefault();
-    
-    if (!uploadedResume) {
-        showMessage('请先上传简历', 'error');
-        return;
-    }
     
     const url = document.getElementById('job-url').value;
     
@@ -201,7 +213,16 @@ async function handleUrlSubmit(event) {
     
     const formData = new FormData();
     formData.append('url', url);
-    formData.append('resume', uploadedResume, uploadedResumeName);
+    
+    // 添加用户ID
+    const userId = getUserId();
+    if (userId) {
+        formData.append('user_id', userId);
+    }
+    
+    if (uploadedResume) {
+        formData.append('resume', uploadedResume, uploadedResumeName);
+    }
     
     await generateResume('/generate-by-url', formData, '职位链接');
 }
@@ -209,11 +230,6 @@ async function handleUrlSubmit(event) {
 // 处理模板表单提交
 async function handleTemplateSubmit(event) {
     event.preventDefault();
-    
-    if (!uploadedResume) {
-        showMessage('请先上传简历', 'error');
-        return;
-    }
     
     const templateName = document.getElementById('template-select').value;
     
@@ -224,7 +240,16 @@ async function handleTemplateSubmit(event) {
     
     const formData = new FormData();
     formData.append('template_name', templateName);
-    formData.append('resume', uploadedResume, uploadedResumeName);
+    
+    // 添加用户ID
+    const userId = getUserId();
+    if (userId) {
+        formData.append('user_id', userId);
+    }
+    
+    if (uploadedResume) {
+        formData.append('resume', uploadedResume, uploadedResumeName);
+    }
     
     await generateResume('/generate-by-template', formData, '模板');
 }
@@ -311,15 +336,59 @@ function showResult(result, type) {
         `;
     }
     
-    if (result.generated_file) {
+    if (result.generated_files || result.generated_file) {
         content += `
             <div class="result-section">
                 <h3>下载简历</h3>
-                <p>
-                    <a href="${API_BASE_URL}/download/${encodeURIComponent(result.generated_file)}" 
-                       class="download-link" 
-                       target="_blank">点击下载生成的简历</a>
-                </p>
+                <div class="download-options">
+        `;
+        
+        if (result.generated_files) {
+            // 新的多格式下载选项
+            if (result.generated_files.html) {
+                content += `
+                    <a href="${API_BASE_URL}/download/${encodeURIComponent(result.generated_files.html)}" 
+                       class="download-btn download-html" 
+                       target="_blank">
+                        <span class="download-icon">📄</span>
+                        HTML格式
+                    </a>
+                `;
+            }
+            if (result.generated_files.pdf) {
+                content += `
+                    <a href="${API_BASE_URL}/download/${encodeURIComponent(result.generated_files.pdf)}" 
+                       class="download-btn download-pdf" 
+                       target="_blank">
+                        <span class="download-icon">📋</span>
+                        PDF格式
+                    </a>
+                `;
+            }
+            if (result.generated_files.docx) {
+                content += `
+                    <a href="${API_BASE_URL}/download/${encodeURIComponent(result.generated_files.docx)}" 
+                       class="download-btn download-docx" 
+                       target="_blank">
+                        <span class="download-icon">📝</span>
+                        Word格式
+                    </a>
+                `;
+            }
+        } else if (result.generated_file) {
+            // 向后兼容的单文件下载
+            content += `
+                <a href="${API_BASE_URL}/download/${encodeURIComponent(result.generated_file)}" 
+                   class="download-btn" 
+                   target="_blank">
+                    <span class="download-icon">📄</span>
+                    下载简历
+                </a>
+            `;
+        }
+        
+        content += `
+                </div>
             </div>
         `;
     }
@@ -330,7 +399,7 @@ function showResult(result, type) {
 
 // 加载模板列表
 async function loadTemplates() {
-    try:
+    try {
         const response = await fetch(API_BASE_URL + '/templates');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -462,4 +531,78 @@ function showMessage(message, type) {
             }
         }, 3000);
     }
+}
+
+// 检查用户信息
+async function checkUserProfile() {
+    const userId = getUserId();
+    
+    if (!userId) {
+        // 没有用户ID，跳转到用户信息维护页面
+        window.location.href = '/static/user-profile.html';
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/users/${userId}`);
+        if (response.ok) {
+            const userData = await response.json();
+            displayUserInfo(userData.profile);
+            
+            // 检查必要信息是否完整
+            if (!userData.profile || !userData.profile.name || !userData.profile.email) {
+                if (confirm('您的基本信息不完整，是否前往完善？')) {
+                    window.location.href = '/static/user-profile.html';
+                    return;
+                }
+            }
+        } else {
+            // 用户不存在，跳转到用户信息维护页面
+            window.location.href = '/static/user-profile.html';
+            return;
+        }
+    } catch (error) {
+        console.error('检查用户信息失败:', error);
+        // 网络错误时也跳转到用户信息维护页面
+        window.location.href = '/static/user-profile.html';
+    }
+}
+
+// 显示用户信息
+function displayUserInfo(profile) {
+    const userDisplayName = document.getElementById('user-display-name');
+    if (userDisplayName && profile && profile.name) {
+        userDisplayName.textContent = `欢迎，${profile.name}`;
+    }
+}
+
+// 绑定用户信息相关事件
+function bindUserInfoEvents() {
+    const editProfileBtn = document.getElementById('edit-profile-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    
+    if (editProfileBtn) {
+        editProfileBtn.addEventListener('click', () => {
+            window.location.href = '/static/user-profile.html';
+        });
+    }
+    
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            if (confirm('确定要切换用户吗？当前的工作进度将会丢失。')) {
+                localStorage.removeItem('resumeai_user_id');
+                window.location.href = '/static/user-profile.html';
+            }
+        });
+    }
+}
+
+// 获取用户ID
+function getUserId() {
+    return localStorage.getItem('resumeai_user_id');
+}
+
+// 设置用户ID
+function setUserId(userId) {
+    localStorage.setItem('resumeai_user_id', userId);
 }

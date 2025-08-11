@@ -54,9 +54,62 @@ class ResumeGenerator:
             
             # 获取样式表
             styles = getSampleStyleSheet()
-            title_style = styles['Title']
-            heading_style = styles['Heading2']
-            normal_style = styles['Normal']
+            
+            # 尝试注册中文字体
+            try:
+                # 尝试使用系统中的中文字体
+                import platform
+                if platform.system() == 'Windows':
+                    # Windows系统字体路径
+                    font_paths = [
+                        'C:/Windows/Fonts/msyh.ttc',  # 微软雅黑
+                        'C:/Windows/Fonts/simhei.ttf',  # 黑体
+                        'C:/Windows/Fonts/simsun.ttc',  # 宋体
+                    ]
+                    
+                    font_registered = False
+                    for font_path in font_paths:
+                        if os.path.exists(font_path):
+                            try:
+                                pdfmetrics.registerFont(TTFont('ChineseFont', font_path))
+                                font_registered = True
+                                break
+                            except:
+                                continue
+                    
+                    if font_registered:
+                        font_name = 'ChineseFont'
+                    else:
+                        font_name = 'Helvetica'  # 回退到默认字体
+                else:
+                    font_name = 'Helvetica'  # 非Windows系统使用默认字体
+            except:
+                font_name = 'Helvetica'  # 出错时使用默认字体
+            
+            # 创建支持中文的样式
+            title_style = ParagraphStyle(
+                'ChineseTitle',
+                parent=styles['Title'],
+                fontName=font_name if font_name != 'ChineseFont' else 'ChineseFont',
+                fontSize=18,
+                spaceAfter=12
+            )
+            
+            heading_style = ParagraphStyle(
+                'ChineseHeading',
+                parent=styles['Heading2'],
+                fontName=font_name if font_name != 'ChineseFont' else 'ChineseFont',
+                fontSize=14,
+                spaceAfter=6
+            )
+            
+            normal_style = ParagraphStyle(
+                'ChineseNormal',
+                parent=styles['Normal'],
+                fontName=font_name if font_name != 'ChineseFont' else 'ChineseFont',
+                fontSize=12,
+                spaceAfter=6
+            )
             
             # 解析内容并添加到PDF
             lines = content.split('\n')
