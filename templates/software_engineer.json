@@ -1,0 +1,19 @@
+{
+  "title": "软件工程师",
+  "company": "模板公司",
+  "description": "我们正在寻找一名有经验的软件工程师加入我们的团队。您将参与开发创新的Web应用程序。",
+  "requirements": [
+    "计算机科学或相关领域的学士学位",
+    "至少3年的Python开发经验",
+    "熟悉Django或Flask框架",
+    "了解前端技术如JavaScript、HTML、CSS",
+    "有数据库设计和优化经验"
+  ],
+  "key_skills": [
+    "Python",
+    "Django", 
+    "JavaScript",
+    "MySQL",
+    "Git"
+  ]
+}

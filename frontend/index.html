@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简历助手 - 智能简历优化工具</title>
+    <link rel="stylesheet" href="/static/src/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>简历助手</h1>
+            <p>智能简历优化工具，帮助您的简历更好地匹配目标职位</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="user-section">
+            <h2>用户信息</h2>
+            <div class="form-group">
+                <label for="user-name">姓名：</label>
+                <input type="text" id="user-name" placeholder="请输入您的姓名">
+            </div>
+            <div class="form-group">
+                <label for="user-email">邮箱：</label>
+                <input type="email" id="user-email" placeholder="请输入您的邮箱">
+            </div>
+            <div class="form-group">
+                <label for="user-phone">电话：</label>
+                <input type="tel" id="user-phone" placeholder="请输入您的电话">
+            </div>
+            <div class="form-group">
+                <label for="user-gender">性别：</label>
+                <select id="user-gender">
+                    <option value="未指定">未指定</option>
+                    <option value="男">男</option>
+                    <option value="女">女</option>
+                </select>
+            </div>
+            <button id="save-user-btn" class="btn-primary">保存用户信息</button>
+            <div id="user-status"></div>
+        </div>
+
+        <div class="upload-section">
+            <h2>上传简历</h2>
+            <div class="form-group">
+                <label for="resume-upload">选择简历文件 (PDF/DOCX)：</label>
+                <input type="file" id="resume-upload" accept=".pdf,.docx">
+                <button id="upload-btn" class="btn-primary">上传简历</button>
+                <div id="upload-status"></div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="description">职位描述生成</button>
+            <button class="tab-button" data-tab="url">职位链接生成</button>
+            <button class="tab-button" data-tab="template">模板生成</button>
+            <button class="tab-button" data-tab="history">生成历史</button>
+        </div>
+
+        <div class="tab-content">
+            <!-- 职位描述生成表单 -->
+            <div id="description-tab" class="tab-pane active">
+                <h2>根据职位描述生成简历</h2>
+                <form id="description-form">
+                    <div class="form-group">
+                        <label for="job-description">职位描述：</label>
+                        <textarea id="job-description" placeholder="请描述您要申请的职位，例如：我们需要一名有3年经验的Python开发工程师，熟悉Django框架，有MySQL数据库设计经验..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" id="description-generate-btn" disabled>生成简历</button>
+                </form>
+            </div>
+
+            <!-- 职位链接生成表单 -->
+            <div id="url-tab" class="tab-pane">
+                <h2>根据职位链接生成简历</h2>
+                <form id="url-form">
+                    <div class="form-group">
+                        <label for="job-url">职位链接：</label>
+                        <input type="url" id="job-url" placeholder="请输入招聘网站的职位链接" required>
+                    </div>
+                    <button type="submit" class="btn-primary" id="url-generate-btn" disabled>生成简历</button>
+                </form>
+            </div>
+
+            <!-- 模板生成表单 -->
+            <div id="template-tab" class="tab-pane">
+                <h2>根据模板生成简历</h2>
+                <form id="template-form">
+                    <div class="form-group">
+                        <label for="template-select">选择模板：</label>
+                        <select id="template-select" required>
+                            <option value="">请选择模板</option>
+                        </select>
+                        <button type="button" id="refresh-templates" class="btn-secondary">刷新模板列表</button>
+                    </div>
+                    <button type="submit" class="btn-primary" id="template-generate-btn" disabled>生成简历</button>
+                </form>
+            </div>
+
+            <!-- 生成历史 -->
+            <div id="history-tab" class="tab-pane">
+                <h2>生成历史</h2>
+                <div class="history-controls">
+                    <button id="refresh-history" class="btn-secondary">刷新历史记录</button>
+                </div>
+                <div id="history-list">
+                    <p>暂无生成历史</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 进度指示器 -->
+        <div id="progress-overlay" class="hidden">
+            <div class="progress-content">
+                <div class="spinner"></div>
+                <p>正在生成简历，请稍候...</p>
+            </div>
+        </div>
+
+        <!-- 结果预览 -->
+        <div id="result-modal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>生成结果</h2>
+                <div id="result-content">
+                    <!-- 结果内容将在这里显示 -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 简历助手. 保留所有权利.</p>
+        </div>
+    </footer>
+
+    <script src="/static/src/script.js"></script>
+</body>
+</html>
