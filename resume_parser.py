@@ -52,7 +52,7 @@ class ResumeParser:
         
         Args:
             file_path: 简历文件路径
-            file_type: 文件类型 ('pdf' 或 'docx')
+            file_type: 文件类型 ('pdf'、'docx' 或 'txt')
             
         Returns:
             包含简历信息的字典
@@ -61,6 +61,8 @@ class ResumeParser:
             return self._parse_pdf(file_path)
         elif file_type.lower() == 'docx':
             return self._parse_docx(file_path)
+        elif file_type.lower() == 'txt':
+            return self._parse_txt(file_path)
         else:
             raise ValueError(f"不支持的文件类型: {file_type}")
     
@@ -129,6 +131,47 @@ class ResumeParser:
             return resume_data
         except Exception as e:
             raise Exception(f"DOCX简历解析失败: {str(e)}")
+    
+    def _parse_txt(self, file_path: str) -> Dict:
+        """
+        解析TXT格式简历
+        """
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                text = f.read()
+            
+            resume_data = {
+                "text": text,
+                "contact_info": self._extract_contact_info(text),
+                "work_experience": self._extract_work_experience(text),
+                "education": self._extract_education(text),
+                "skills": self._extract_skills(text),
+                "projects": self._extract_projects(text),
+                "certifications": self._extract_certifications(text)
+            }
+            
+            return resume_data
+        except UnicodeDecodeError:
+            # 如果UTF-8解码失败，尝试其他编码
+            try:
+                with open(file_path, 'r', encoding='gbk') as f:
+                    text = f.read()
+                
+                resume_data = {
+                    "text": text,
+                    "contact_info": self._extract_contact_info(text),
+                    "work_experience": self._extract_work_experience(text),
+                    "education": self._extract_education(text),
+                    "skills": self._extract_skills(text),
+                    "projects": self._extract_projects(text),
+                    "certifications": self._extract_certifications(text)
+                }
+                
+                return resume_data
+            except Exception as e:
+                raise Exception(f"TXT简历解析失败: {str(e)}")
+        except Exception as e:
+            raise Exception(f"TXT简历解析失败: {str(e)}")
     
     def _extract_contact_info(self, text: str) -> Dict:
         """
@@ -422,6 +465,7 @@ class ResumeParser:
         提取项目经验
         """
         projects = []
+        current_project = None  # 在函数开始时初始化变量
         
         # 查找项目相关关键词
         project_keywords = ['项目经验', '项目经历', '项目背景', 'projects', 'project experience']
@@ -447,7 +491,6 @@ class ResumeParser:
             # 提取项目名称和描述
             # 查找项目标题（通常是加粗或以"项目"开头的行）
             project_lines = project_section_text.split('\n')
-            current_project = None
             
             for line in project_lines:
                 line = line.strip()

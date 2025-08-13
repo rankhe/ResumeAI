@@ -130,6 +130,16 @@ class SimpleUserInterface:
 if not MODULES_AVAILABLE:
     ui = SimpleUserInterface()
 
+def check_modules_available():
+    """
+    检查模块是否可用，如果不可用则抛出异常
+    """
+    if not MODULES_AVAILABLE:
+        raise HTTPException(
+            status_code=503, 
+            detail="服务暂时不可用：核心模块未正确加载，请检查依赖项安装"
+        )
+
 class JobDescriptionRequest(BaseModel):
     description: str
 

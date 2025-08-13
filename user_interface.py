@@ -225,6 +225,7 @@ class UserInterface:
         
         # 生成唯一标识符
         unique_id = uuid.uuid4().hex
+        resume_id = str(uuid.uuid4())  # 生成简历ID
         
         # 生成PDF格式
         pdf_path = f"generated_resume_{unique_id}.pdf"
@@ -238,8 +239,9 @@ class UserInterface:
         html_path = f"generated_resume_{unique_id}.html"
         self._generate_html_resume(optimized_content, job_info, resume_data, html_path)
         
-        # 创建ResumeFormats对象
+        # 创建ResumeFormats对象，包含必需的resume_id字段
         formats = ResumeFormats(
+            resume_id=resume_id,
             pdf_path=pdf_path,
             docx_path=docx_path,
             html_path=html_path
@@ -409,11 +411,11 @@ class UserInterface:
     
     <div class="section">
         <h2>优化建议</h2>
-        <h3>匹配度评分: """ + str(self._calculate_match_score(job_info, resume_data)) + """%</h3>
+        <h3>匹配度评分: """ + str(self.resume_optimizer._calculate_match_score(job_info, resume_data)) + """%</h3>
         """
         
         # 添加优化建议
-        suggestions = self._generate_suggestions(job_info, resume_data)
+        suggestions = self.resume_optimizer._generate_suggestions(job_info, resume_data)
         if suggestions:
             html_content += "<ul>\n"
             for suggestion in suggestions:

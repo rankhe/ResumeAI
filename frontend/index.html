@@ -3,138 +3,537 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>简历助手 - 智能简历优化工具</title>
+    <title>智能简历助手 - 一键制作完美简历</title>
     <link rel="stylesheet" href="/static/src/style.css">
+    <style>
+        /* 临时内联样式，确保页面能正确显示 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+        
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .app-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+        
+        .app-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .app-subtitle {
+            font-size: 1.125rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        .main-content {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+        
+        .welcome-section {
+            text-align: center;
+            padding: 3rem 0;
+        }
+        
+        .welcome-content h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .welcome-content p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .action-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .action-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .action-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #1f2937;
+            transition: color 0.3s ease;
+        }
+        
+        .action-card p {
+            color: #6b7280;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .card-btn {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .card-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 隐藏其他区域 */
+        .resume-builder,
+        .resume-optimizer,
+        .job-matcher,
+        .result-section,
+        .loading-overlay {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>简历助手</h1>
-            <p>智能简历优化工具，帮助您的简历更好地匹配目标职位</p>
-        </div>
-    </header>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="app-title">🚀 智能简历助手</h1>
+                <p class="app-subtitle">AI驱动，一键制作完美简历</p>
+            </div>
+        </header>
 
-    <main class="container">
-        <div class="user-section">
-            <h2>用户信息</h2>
-            <div class="form-group">
-                <label for="user-name">姓名：</label>
-                <input type="text" id="user-name" placeholder="请输入您的姓名">
-            </div>
-            <div class="form-group">
-                <label for="user-email">邮箱：</label>
-                <input type="email" id="user-email" placeholder="请输入您的邮箱">
-            </div>
-            <div class="form-group">
-                <label for="user-phone">电话：</label>
-                <input type="tel" id="user-phone" placeholder="请输入您的电话">
-            </div>
-            <div class="form-group">
-                <label for="user-gender">性别：</label>
-                <select id="user-gender">
-                    <option value="未指定">未指定</option>
-                    <option value="男">男</option>
-                    <option value="女">女</option>
-                </select>
-            </div>
-            <button id="save-user-btn" class="btn-primary">保存用户信息</button>
-            <div id="user-status"></div>
-        </div>
-
-        <div class="upload-section">
-            <h2>上传简历</h2>
-            <div class="form-group">
-                <label for="resume-upload">选择简历文件 (PDF/DOCX)：</label>
-                <input type="file" id="resume-upload" accept=".pdf,.docx">
-                <button id="upload-btn" class="btn-primary">上传简历</button>
-                <div id="upload-status"></div>
-            </div>
-        </div>
-
-        <div class="tabs">
-            <button class="tab-button active" data-tab="description">职位描述生成</button>
-            <button class="tab-button" data-tab="url">职位链接生成</button>
-            <button class="tab-button" data-tab="template">模板生成</button>
-            <button class="tab-button" data-tab="history">生成历史</button>
-        </div>
-
-        <div class="tab-content">
-            <!-- 职位描述生成表单 -->
-            <div id="description-tab" class="tab-pane active">
-                <h2>根据职位描述生成简历</h2>
-                <form id="description-form">
-                    <div class="form-group">
-                        <label for="job-description">职位描述：</label>
-                        <textarea id="job-description" placeholder="请描述您要申请的职位，例如：我们需要一名有3年经验的Python开发工程师，熟悉Django框架，有MySQL数据库设计经验..." required></textarea>
+        <!-- 主要内容区域 -->
+        <main class="main-content">
+            <!-- 欢迎引导区 -->
+            <section class="welcome-section" id="welcome-section">
+                <div class="welcome-content">
+                    <h2>👋 欢迎使用智能简历助手</h2>
+                    <p>选择您的使用方式，我们将为您提供最佳的简历解决方案</p>
+                    
+                    <div class="action-cards">
+                        <div class="action-card" data-action="create-new">
+                            <div class="card-icon">✨</div>
+                            <h3>从零开始制作</h3>
+                            <p>填写基本信息，AI帮您生成专业简历</p>
+                            <button class="card-btn">开始制作</button>
+                        </div>
+                        
+                        <div class="action-card" data-action="upload-optimize">
+                            <div class="card-icon">🔧</div>
+                            <h3>上传简历优化</h3>
+                            <p>上传现有简历，获得专业优化建议</p>
+                            <button class="card-btn">上传优化</button>
+                        </div>
+                        
+                        <div class="action-card" data-action="job-match">
+                            <div class="card-icon">🎯</div>
+                            <h3>职位匹配优化</h3>
+                            <p>针对特定职位，定制化优化简历</p>
+                            <button class="card-btn">职位匹配</button>
+                        </div>
                     </div>
-                    <button type="submit" class="btn-primary" id="description-generate-btn" disabled>生成简历</button>
-                </form>
-            </div>
+                </div>
+            </section>
 
-            <!-- 职位链接生成表单 -->
-            <div id="url-tab" class="tab-pane">
-                <h2>根据职位链接生成简历</h2>
-                <form id="url-form">
-                    <div class="form-group">
-                        <label for="job-url">职位链接：</label>
-                        <input type="url" id="job-url" placeholder="请输入招聘网站的职位链接" required>
+            <!-- 简历制作区域 -->
+            <section class="resume-builder" id="resume-builder" style="display: none;">
+                <div class="builder-header">
+                    <button class="back-btn" onclick="showWelcome()">← 返回</button>
+                    <h2>📝 制作您的简历</h2>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
                     </div>
-                    <button type="submit" class="btn-primary" id="url-generate-btn" disabled>生成简历</button>
-                </form>
-            </div>
+                </div>
 
-            <!-- 模板生成表单 -->
-            <div id="template-tab" class="tab-pane">
-                <h2>根据模板生成简历</h2>
-                <form id="template-form">
-                    <div class="form-group">
-                        <label for="template-select">选择模板：</label>
-                        <select id="template-select" required>
-                            <option value="">请选择模板</option>
-                        </select>
-                        <button type="button" id="refresh-templates" class="btn-secondary">刷新模板列表</button>
+                <div class="builder-content">
+                    <!-- 步骤1: 基本信息 -->
+                    <div class="step-content active" id="step-1">
+                        <h3>基本信息</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>姓名 *</label>
+                                <input type="text" id="name" placeholder="请输入您的姓名" required>
+                            </div>
+                            <div class="form-group">
+                                <label>邮箱 *</label>
+                                <input type="email" id="email" placeholder="your.email@example.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label>电话 *</label>
+                                <input type="tel" id="phone" placeholder="138-0000-0000" required>
+                            </div>
+                            <div class="form-group">
+                                <label>期望职位 *</label>
+                                <input type="text" id="target-position" placeholder="如：前端开发工程师" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>个人简介</label>
+                            <textarea id="summary" placeholder="简要介绍您的专业背景和优势（AI将帮您优化）"></textarea>
+                        </div>
+                        <button class="next-btn" onclick="nextStep()">下一步</button>
                     </div>
-                    <button type="submit" class="btn-primary" id="template-generate-btn" disabled>生成简历</button>
-                </form>
-            </div>
 
-            <!-- 生成历史 -->
-            <div id="history-tab" class="tab-pane">
-                <h2>生成历史</h2>
-                <div class="history-controls">
-                    <button id="refresh-history" class="btn-secondary">刷新历史记录</button>
+                    <!-- 步骤2: 工作经验 -->
+                    <div class="step-content" id="step-2">
+                        <h3>工作经验</h3>
+                        <div id="experience-list">
+                            <div class="experience-item">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>公司名称</label>
+                                        <input type="text" placeholder="公司名称">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>职位</label>
+                                        <input type="text" placeholder="职位名称">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>开始时间</label>
+                                        <input type="month">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>结束时间</label>
+                                        <input type="month">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>工作描述</label>
+                                    <textarea placeholder="描述您的主要工作内容和成就"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="add-btn" onclick="addExperience()">+ 添加工作经验</button>
+                        <div class="step-buttons">
+                            <button class="prev-btn" onclick="prevStep()">上一步</button>
+                            <button class="next-btn" onclick="nextStep()">下一步</button>
+                        </div>
+                    </div>
+
+                    <!-- 步骤3: 教育背景 -->
+                    <div class="step-content" id="step-3">
+                        <h3>教育背景</h3>
+                        <div id="education-list">
+                            <div class="education-item">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>学校名称</label>
+                                        <input type="text" placeholder="学校名称">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>专业</label>
+                                        <input type="text" placeholder="专业名称">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>学历</label>
+                                        <select>
+                                            <option>本科</option>
+                                            <option>硕士</option>
+                                            <option>博士</option>
+                                            <option>专科</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>毕业时间</label>
+                                        <input type="month">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="add-btn" onclick="addEducation()">+ 添加教育经历</button>
+                        <div class="step-buttons">
+                            <button class="prev-btn" onclick="prevStep()">上一步</button>
+                            <button class="next-btn" onclick="nextStep()">下一步</button>
+                        </div>
+                    </div>
+
+                    <!-- 步骤4: 技能特长 -->
+                    <div class="step-content" id="step-4">
+                        <h3>技能特长</h3>
+                        <div class="form-group">
+                            <label>专业技能</label>
+                            <div class="skills-input">
+                                <input type="text" id="skill-input" placeholder="输入技能后按回车添加">
+                                <div class="skills-tags" id="skills-tags"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>语言能力</label>
+                            <div id="language-list">
+                                <div class="language-item">
+                                    <select>
+                                        <option>英语</option>
+                                        <option>日语</option>
+                                        <option>韩语</option>
+                                        <option>法语</option>
+                                        <option>德语</option>
+                                    </select>
+                                    <select>
+                                        <option>流利</option>
+                                        <option>熟练</option>
+                                        <option>一般</option>
+                                        <option>基础</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button class="add-btn" onclick="addLanguage()">+ 添加语言</button>
+                        </div>
+                        <div class="step-buttons">
+                            <button class="prev-btn" onclick="prevStep()">上一步</button>
+                            <button class="generate-btn" onclick="generateResume()">🚀 生成简历</button>
+                        </div>
+                    </div>
                 </div>
-                <div id="history-list">
-                    <p>暂无生成历史</p>
+            </section>
+
+            <!-- 简历优化区域 -->
+            <section class="resume-optimizer" id="resume-optimizer" style="display: none;">
+                <div class="optimizer-header">
+                    <button class="back-btn" onclick="showWelcome()">← 返回</button>
+                    <h2>🔧 简历优化助手</h2>
                 </div>
-            </div>
-        </div>
 
-        <!-- 进度指示器 -->
-        <div id="progress-overlay" class="hidden">
-            <div class="progress-content">
-                <div class="spinner"></div>
-                <p>正在生成简历，请稍候...</p>
-            </div>
-        </div>
+                <div class="optimizer-content">
+                    <div class="upload-zone" id="upload-zone">
+                        <div class="upload-icon">📄</div>
+                        <h3>上传您的简历</h3>
+                        <p>支持 PDF、Word 格式，最大 10MB</p>
+                        <input type="file" id="resume-file" accept=".pdf,.doc,.docx" style="display: none;">
+                        <button class="upload-btn" onclick="document.getElementById('resume-file').click()">选择文件</button>
+                    </div>
 
-        <!-- 结果预览 -->
-        <div id="result-modal" class="modal hidden">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>生成结果</h2>
-                <div id="result-content">
-                    <!-- 结果内容将在这里显示 -->
+                    <div class="analysis-result" id="analysis-result" style="display: none;">
+                        <h3>📊 简历分析结果</h3>
+                        <div class="score-card">
+                            <div class="score-circle">
+                                <span class="score-number" id="resume-score">85</span>
+                                <span class="score-label">分</span>
+                            </div>
+                            <div class="score-details">
+                                <div class="score-item">
+                                    <span class="score-category">内容完整度</span>
+                                    <div class="score-bar">
+                                        <div class="score-fill" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                                <div class="score-item">
+                                    <span class="score-category">关键词匹配</span>
+                                    <div class="score-bar">
+                                        <div class="score-fill" style="width: 70%"></div>
+                                    </div>
+                                </div>
+                                <div class="score-item">
+                                    <span class="score-category">格式规范</span>
+                                    <div class="score-bar">
+                                        <div class="score-fill" style="width: 90%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="suggestions">
+                            <h4>💡 优化建议</h4>
+                            <div class="suggestion-list" id="suggestion-list">
+                                <!-- 建议将通过 JavaScript 动态添加 -->
+                            </div>
+                        </div>
+
+                        <button class="optimize-btn" onclick="applyOptimizations()">应用优化建议</button>
+                    </div>
                 </div>
+            </section>
+
+            <!-- 职位匹配区域 -->
+            <section class="job-matcher" id="job-matcher" style="display: none;">
+                <div class="matcher-header">
+                    <button class="back-btn" onclick="showWelcome()">← 返回</button>
+                    <h2>🎯 职位匹配优化</h2>
+                </div>
+
+                <div class="matcher-content">
+                    <div class="job-input-section">
+                        <h3>目标职位信息</h3>
+                        <div class="input-tabs">
+                            <button class="tab-btn active" data-tab="description">职位描述</button>
+                            <button class="tab-btn" data-tab="url">职位链接</button>
+                        </div>
+
+                        <div class="tab-content active" id="description-tab">
+                            <textarea id="job-description" placeholder="粘贴职位描述，AI将分析关键要求并优化您的简历"></textarea>
+                        </div>
+
+                        <div class="tab-content" id="url-tab">
+                            <input type="url" id="job-url" placeholder="输入招聘网站的职位链接">
+                        </div>
+
+                        <button class="analyze-btn" onclick="analyzeJobMatch()">分析匹配度</button>
+                    </div>
+
+                    <div class="match-result" id="match-result" style="display: none;">
+                        <h3>📈 匹配度分析</h3>
+                        <div class="match-overview">
+                            <div class="match-score">
+                                <span class="match-number" id="match-score">72</span>
+                                <span class="match-label">% 匹配</span>
+                            </div>
+                            <div class="match-details">
+                                <div class="match-item good">
+                                    <span class="match-icon">✅</span>
+                                    <span>技能匹配度高</span>
+                                </div>
+                                <div class="match-item warning">
+                                    <span class="match-icon">⚠️</span>
+                                    <span>缺少关键词</span>
+                                </div>
+                                <div class="match-item bad">
+                                    <span class="match-icon">❌</span>
+                                    <span>经验描述不够具体</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="optimization-suggestions">
+                            <h4>🎯 定制化优化建议</h4>
+                            <div class="suggestion-cards" id="job-suggestions">
+                                <!-- 建议卡片将通过 JavaScript 动态添加 -->
+                            </div>
+                        </div>
+
+                        <button class="customize-btn" onclick="customizeResume()">定制简历</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 结果展示区域 -->
+            <section class="result-section" id="result-section" style="display: none;">
+                <div class="result-header">
+                    <button class="back-btn" onclick="showWelcome()">← 返回首页</button>
+                    <h2>🎉 您的简历已准备就绪</h2>
+                </div>
+
+                <div class="result-content">
+                    <div class="result-preview">
+                        <div class="preview-header">
+                            <h3>简历预览</h3>
+                            <div class="preview-actions">
+                                <button class="preview-btn" onclick="previewResume()">👁️ 预览</button>
+                                <button class="edit-btn" onclick="editResume()">✏️ 编辑</button>
+                            </div>
+                        </div>
+                        <div class="preview-content" id="preview-content">
+                            <!-- 简历预览内容 -->
+                        </div>
+                    </div>
+
+                    <div class="download-section">
+                        <h3>下载简历</h3>
+                        <div class="download-options">
+                            <button class="download-btn pdf" onclick="downloadResume('pdf')">
+                                <span class="download-icon">📄</span>
+                                <span>PDF 格式</span>
+                            </button>
+                            <button class="download-btn word" onclick="downloadResume('docx')">
+                                <span class="download-icon">📝</span>
+                                <span>Word 格式</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="share-section">
+                        <h3>分享简历</h3>
+                        <div class="share-options">
+                            <button class="share-btn" onclick="generateShareLink()">
+                                <span class="share-icon">🔗</span>
+                                <span>生成分享链接</span>
+                            </button>
+                            <button class="share-btn" onclick="sendByEmail()">
+                                <span class="share-icon">📧</span>
+                                <span>邮件发送</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 加载指示器 -->
+        <div class="loading-overlay" id="loading-overlay" style="display: none;">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <h3 id="loading-text">正在处理中...</h3>
+                <p id="loading-subtitle">AI正在为您优化简历</p>
             </div>
         </div>
-    </main>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2023 简历助手. 保留所有权利.</p>
-        </div>
-    </footer>
+    </div>
 
     <script src="/static/src/script.js"></script>
 </body>
