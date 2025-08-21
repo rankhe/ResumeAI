@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户信息维护 - 简历助手</title>
+    <link rel="stylesheet" href="/static/src/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>简历助手</h1>
+            <p>请先完善您的基本信息</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="profile-form-container">
+            <h2>基本信息维护</h2>
+            <form id="profile-form">
+                <div class="form-group">
+                    <label for="user-name">姓名 <span class="required">*</span>：</label>
+                    <input type="text" id="user-name" placeholder="请输入您的姓名" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="user-email">邮箱 <span class="required">*</span>：</label>
+                    <input type="email" id="user-email" placeholder="请输入您的邮箱" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="user-phone">电话 <span class="required">*</span>：</label>
+                    <input type="tel" id="user-phone" placeholder="请输入您的电话" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="user-gender">性别：</label>
+                    <select id="user-gender">
+                        <option value="未指定">未指定</option>
+                        <option value="男">男</option>
+                        <option value="女">女</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="user-birth">出生日期：</label>
+                    <input type="date" id="user-birth">
+                </div>
+                
+                <div class="form-group">
+                    <label for="user-address">地址：</label>
+                    <input type="text" id="user-address" placeholder="请输入您的地址">
+                </div>
+                
+                <div class="form-group">
+                    <label for="user-education">最高学历：</label>
+                    <select id="user-education">
+                        <option value="">请选择</option>
+                        <option value="高中">高中</option>
+                        <option value="大专">大专</option>
+                        <option value="本科">本科</option>
+                        <option value="硕士">硕士</option>
+                        <option value="博士">博士</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="user-experience">工作经验：</label>
+                    <select id="user-experience">
+                        <option value="">请选择</option>
+                        <option value="应届毕业生">应届毕业生</option>
+                        <option value="1年以下">1年以下</option>
+                        <option value="1-3年">1-3年</option>
+                        <option value="3-5年">3-5年</option>
+                        <option value="5-10年">5-10年</option>
+                        <option value="10年以上">10年以上</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="user-skills">技能标签：</label>
+                    <textarea id="user-skills" placeholder="请输入您的技能，用逗号分隔，如：Python, JavaScript, React"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="user-summary">个人简介：</label>
+                    <textarea id="user-summary" placeholder="请简要介绍您的职业背景和优势"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary" id="save-profile-btn">保存信息</button>
+                    <button type="button" class="btn-secondary" id="skip-btn">暂时跳过</button>
+                </div>
+                
+                <div id="profile-status"></div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 简历助手. 保留所有权利.</p>
+        </div>
+    </footer>
+
+    <script src="/static/src/user-profile.js"></script>
+</body>
+</html>

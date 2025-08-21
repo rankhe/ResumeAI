@@ -25,7 +25,7 @@ class UserInterface:
         if not os.path.exists(self.templates_dir):
             os.makedirs(self.templates_dir)
     
-    def generate_resume_by_description(self, job_description: str, resume_file: str, file_type: str = None) -> Dict:
+    def generate_resume_by_description(self, job_description: str, resume_file: str, file_type: str = None, user_id: str = None) -> Dict:
         """
         根据职位描述生成简历
         
@@ -33,6 +33,7 @@ class UserInterface:
             job_description: 职位描述文本
             resume_file: 简历文件路径
             file_type: 简历文件类型（可选）
+            user_id: 用户ID（可选）
             
         Returns:
             生成结果字典
@@ -52,7 +53,11 @@ class UserInterface:
             }
             
             # 解析用户简历
-            resume_data = self.resume_parser.parse_resume(resume_file, file_type)
+            if resume_file:
+                resume_data = self.resume_parser.parse_resume(resume_file, file_type)
+            else:
+                # 如果没有上传简历，尝试从用户资料获取信息
+                resume_data = self._get_user_resume_data(user_id)
             
             # 优化简历
             optimization_result = self.resume_optimizer.optimize_resume(job_info, resume_data)
@@ -74,6 +79,11 @@ class UserInterface:
                 "match_score": optimization_result["match_score"],
                 "suggestions": optimization_result["suggestions"],
                 "ats_suggestions": optimization_result["ats_suggestions"],
+                "generated_files": {
+                    "pdf": formats.pdf_path,
+                    "docx": formats.docx_path,
+                    "html": formats.html_path
+                },
                 "formats": {
                     "pdf": formats.pdf_path,
                     "docx": formats.docx_path,
@@ -86,7 +96,7 @@ class UserInterface:
                 "message": f"简历生成失败: {str(e)}"
             }
     
-    def generate_resume_by_url(self, job_url: str, resume_file: str, file_type: str = None) -> Dict:
+    def generate_resume_by_url(self, job_url: str, resume_file: str, file_type: str = None, user_id: str = None) -> Dict:
         """
         根据职位链接生成简历
         
@@ -107,7 +117,11 @@ class UserInterface:
             job_info = self.job_analyzer.analyze_job_posting(job_url)
             
             # 解析用户简历
-            resume_data = self.resume_parser.parse_resume(resume_file, file_type)
+            if resume_file:
+                resume_data = self.resume_parser.parse_resume(resume_file, file_type)
+            else:
+                # 如果没有上传简历，尝试从用户资料获取信息
+                resume_data = self._get_user_resume_data(user_id)
             
             # 优化简历
             optimization_result = self.resume_optimizer.optimize_resume(job_info, resume_data)
@@ -129,6 +143,11 @@ class UserInterface:
                 "match_score": optimization_result["match_score"],
                 "suggestions": optimization_result["suggestions"],
                 "ats_suggestions": optimization_result["ats_suggestions"],
+                "generated_files": {
+                    "pdf": formats.pdf_path,
+                    "docx": formats.docx_path,
+                    "html": formats.html_path
+                },
                 "formats": {
                     "pdf": formats.pdf_path,
                     "docx": formats.docx_path,
@@ -141,7 +160,7 @@ class UserInterface:
                 "message": f"简历生成失败: {str(e)}"
             }
     
-    def generate_resume_by_template(self, template_name: str, resume_file: str, file_type: str = None) -> Dict:
+    def generate_resume_by_template(self, template_name: str, resume_file: str, file_type: str = None, user_id: str = None) -> Dict:
         """
         根据模板生成简历
         
@@ -171,7 +190,11 @@ class UserInterface:
                 template_data = json.load(f)
             
             # 解析用户简历
-            resume_data = self.resume_parser.parse_resume(resume_file, file_type)
+            if resume_file:
+                resume_data = self.resume_parser.parse_resume(resume_file, file_type)
+            else:
+                # 如果没有上传简历，尝试从用户资料获取信息
+                resume_data = self._get_user_resume_data(user_id)
             
             # 使用模板数据作为职位信息
             job_info = template_data
@@ -196,6 +219,11 @@ class UserInterface:
                 "match_score": optimization_result["match_score"],
                 "suggestions": optimization_result["suggestions"],
                 "ats_suggestions": optimization_result["ats_suggestions"],
+                "generated_files": {
+                    "pdf": formats.pdf_path,
+                    "docx": formats.docx_path,
+                    "html": formats.html_path
+                },
                 "formats": {
                     "pdf": formats.pdf_path,
                     "docx": formats.docx_path,
@@ -229,11 +257,11 @@ class UserInterface:
         
         # 生成PDF格式
         pdf_path = f"generated_resume_{unique_id}.pdf"
-        self.resume_generator.generate_resume(optimized_content, "pdf", pdf_path)
+        self.resume_generator.generate_resume(optimized_content, "pdf", f"generated_resume_{unique_id}")
         
         # 生成DOCX格式
         docx_path = f"generated_resume_{unique_id}.docx"
-        self.resume_generator.generate_resume(optimized_content, "docx", docx_path)
+        self.resume_generator.generate_resume(optimized_content, "docx", f"generated_resume_{unique_id}")
         
         # 生成HTML格式
         html_path = f"generated_resume_{unique_id}.html"
@@ -241,7 +269,6 @@ class UserInterface:
         
         # 创建ResumeFormats对象，包含必需的resume_id字段
         formats = ResumeFormats(
-            resume_id=resume_id,
             pdf_path=pdf_path,
             docx_path=docx_path,
             html_path=html_path
@@ -269,7 +296,7 @@ class UserInterface:
     <title>简历 - {job_info.get('title', '未知职位')}</title>
     <style>
         body {{
-            font-family: Arial, sans-serif;
+            font-family: "Microsoft YaHei", "SimHei", "SimSun", Arial, sans-serif;
             line-height: 1.6;
             max-width: 800px;
             margin: 0 auto;
@@ -541,6 +568,63 @@ class UserInterface:
                 found_skills.append(skill)
         
         return found_skills
+    
+    def _get_user_resume_data(self, user_id: str = None) -> Dict:
+        """
+        从用户资料获取简历数据
+        
+        Args:
+            user_id: 用户ID
+            
+        Returns:
+            简历数据字典
+        """
+        if user_id:
+            try:
+                from models import UserResumeManager
+                user_manager = UserResumeManager()
+                user_profile = user_manager.get_user(user_id)
+                
+                if user_profile:
+                    # 将用户资料转换为简历数据格式
+                    skills = []
+                    if hasattr(user_profile, 'skills') and user_profile.skills:
+                        if isinstance(user_profile.skills, str):
+                            skills = [skill.strip() for skill in user_profile.skills.split(',') if skill.strip()]
+                        elif isinstance(user_profile.skills, list):
+                            skills = user_profile.skills
+                    
+                    return {
+                        "contact_info": {
+                            "name": user_profile.name or "待填写",
+                            "email": user_profile.email or "待填写",
+                            "phone": user_profile.phone or "待填写",
+                            "address": getattr(user_profile, 'address', '') or "",
+                            "gender": getattr(user_profile, 'gender', '') or ""
+                        },
+                        "skills": skills,
+                        "work_experience": [],  # 可以后续扩展
+                        "education": [],  # 可以后续扩展
+                        "projects": [],
+                        "summary": getattr(user_profile, 'summary', '') or "",
+                        "education_level": getattr(user_profile, 'education_level', '') or "",
+                        "work_experience_years": getattr(user_profile, 'work_experience', '') or ""
+                    }
+            except Exception as e:
+                print(f"获取用户资料失败: {e}")
+        
+        # 如果没有用户ID或获取失败，返回默认空数据
+        return {
+            "contact_info": {
+                "name": "待填写",
+                "email": "待填写",
+                "phone": "待填写"
+            },
+            "skills": [],
+            "work_experience": [],
+            "education": [],
+            "projects": []
+        }
     
     def _save_to_history(self, record: Dict):
         """

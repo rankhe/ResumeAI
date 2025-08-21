@@ -1,0 +1,44 @@
+[
+  {
+    "type": "description",
+    "input": "广告设计师",
+    "output": "generated_resume_03624f93f3a543898417fa30b0ef1dba.pdf",
+    "match_score": 60.0,
+    "timestamp": "2025-08-11T21:03:56.089492"
+  },
+  {
+    "type": "description",
+    "input": "写字楼保安人员",
+    "output": "generated_resume_476e9ea61ba6471683501f53f4f40410.pdf",
+    "match_score": 70.0,
+    "timestamp": "2025-08-11T21:16:13.993906"
+  },
+  {
+    "type": "description",
+    "input": "电话销售人员",
+    "output": "generated_resume_672448d3da2942a594cae46d0556b55c.pdf",
+    "match_score": 60.0,
+    "timestamp": "2025-08-11T21:19:18.368170"
+  },
+  {
+    "type": "description",
+    "input": "python 开发工程师",
+    "output": "generated_resume_de20bafa8e1643dfb524afc068c1d182.pdf",
+    "match_score": 25.0,
+    "timestamp": "2025-08-11T21:23:37.210226"
+  },
+  {
+    "type": "description",
+    "input": "UI设计师",
+    "output": "generated_resume_cc2e18184c674591b93ec2496122e213.pdf",
+    "match_score": 70.0,
+    "timestamp": "2025-08-11T21:27:40.470539"
+  },
+  {
+    "type": "description",
+    "input": "市场调查员",
+    "output": "generated_resume_4b6a31e37a6c4aa7895ba37e21e30d96.pdf",
+    "match_score": 60.0,
+    "timestamp": "2025-08-11T21:32:08.343930"
+  }
+]

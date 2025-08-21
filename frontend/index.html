@@ -170,7 +170,6 @@
                 <p class="app-subtitle">AI驱动，一键制作完美简历</p>
             </div>
         </header>
-
         <!-- 主要内容区域 -->
         <main class="main-content">
             <!-- 欢迎引导区 -->
@@ -203,6 +202,47 @@
                     </div>
                 </div>
             </section>
+=======
+    <main class="container">
+        <!-- 用户信息显示区域 -->
+        <div class="user-info-bar">
+            <div class="user-info">
+                <span id="user-display-name">未登录用户</span>
+                <button id="edit-profile-btn" class="btn-link">编辑信息</button>
+                <button id="logout-btn" class="btn-link">切换用户</button>
+            </div>
+        </div>
+
+        <div class="upload-section">
+            <h2>上传简历</h2>
+            <div class="form-group">
+                <label for="resume-upload">选择简历文件 (PDF/DOCX)：</label>
+                <input type="file" id="resume-upload" accept=".pdf,.docx">
+                <button id="upload-btn" class="btn-primary">上传简历</button>
+                <div id="upload-status"></div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="description">职位描述生成</button>
+            <button class="tab-button" data-tab="url">职位链接生成</button>
+            <button class="tab-button" data-tab="template">模板生成</button>
+            <button class="tab-button" data-tab="history">生成历史</button>
+        </div>
+
+        <div class="tab-content">
+            <!-- 职位描述生成表单 -->
+            <div id="description-tab" class="tab-pane active">
+                <h2>根据职位描述生成简历</h2>
+                <form id="description-form">
+                    <div class="form-group">
+                        <label for="job-description">职位描述：</label>
+                        <textarea id="job-description" placeholder="请描述您要申请的职位，例如：我们需要一名有3年经验的Python开发工程师，熟悉Django框架，有MySQL数据库设计经验..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" id="description-generate-btn">生成简历</button>
+                </form>
+            </div>
+>>>>>>> 1116a7b285a79e4438e5efe62188206fc307363b
 
             <!-- 简历制作区域 -->
             <section class="resume-builder" id="resume-builder" style="display: none;">
@@ -212,7 +252,13 @@
                     <div class="progress-bar">
                         <div class="progress-fill" id="progress-fill"></div>
                     </div>
+<<<<<<< HEAD
                 </div>
+=======
+                    <button type="submit" class="btn-primary" id="url-generate-btn">生成简历</button>
+                </form>
+            </div>
+>>>>>>> 1116a7b285a79e4438e5efe62188206fc307363b
 
                 <div class="builder-content">
                     <!-- 步骤1: 基本信息 -->
@@ -242,6 +288,12 @@
                         </div>
                         <button class="next-btn" onclick="nextStep()">下一步</button>
                     </div>
+<<<<<<< HEAD
+=======
+                    <button type="submit" class="btn-primary" id="template-generate-btn">生成简历</button>
+                </form>
+            </div>
+>>>>>>> 1116a7b285a79e4438e5efe62188206fc307363b
 
                     <!-- 步骤2: 工作经验 -->
                     <div class="step-content" id="step-2">

@@ -816,6 +816,126 @@ body {
     color: rgba(255, 255, 255, 0.8);
 }
 
+/* 用户信息栏样式 */
+.user-info-bar {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#user-display-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: #667eea;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 0.9rem;
+    margin-left: 1rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-link:hover {
+    background-color: #f0f2ff;
+    text-decoration: none;
+}
+
+/* 用户信息维护页面样式 */
+.profile-form-container {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.profile-form-container h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+    font-size: 1.8rem;
+}
+
+.required {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.form-actions .btn-primary,
+.form-actions .btn-secondary {
+    flex: 1;
+    max-width: 150px;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.btn-secondary:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* 消息样式增强 */
+.message {
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+    margin-top: 1rem;
+    font-weight: 500;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.message.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
     .main-content {
@@ -850,6 +970,30 @@ body {
     .share-options {
         justify-content: center;
     }
+    
+    .profile-form-container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+    
+    .user-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .btn-link {
+        margin-left: 0;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions .btn-primary,
+    .form-actions .btn-secondary {
+        max-width: none;
+    }
 }
 
 /* 动画效果 */
@@ -857,6 +1001,7 @@ body {
     animation: fadeIn 0.5s ease;
 }
 
+<<<<<<< HEAD
 .slide-up {
     animation: slideUp 0.5s ease;
 }
@@ -883,4 +1028,90 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--gray-500);
+=======
+/* 文件输入样式调整 */
+.form-group input[type="file"] {
+    padding: 0.5rem;
+    display: inline-block;
+    margin-right: 1rem;
+}
+
+/* 下载选项样式 */
+.download-options {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    min-width: 120px;
+    justify-content: center;
+}
+
+.download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    text-decoration: none;
+}
+
+.download-icon {
+    font-size: 1.2rem;
+}
+
+/* HTML格式下载按钮 */
+.download-html {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: white;
+}
+
+.download-html:hover {
+    background: linear-gradient(135deg, #ff5252, #e53935);
+    color: white;
+}
+
+/* PDF格式下载按钮 */
+.download-pdf {
+    background: linear-gradient(135deg, #4ecdc4, #44a08d);
+    color: white;
+}
+
+.download-pdf:hover {
+    background: linear-gradient(135deg, #26d0ce, #2e8b57);
+    color: white;
+}
+
+/* Word格式下载按钮 */
+.download-docx {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.download-docx:hover {
+    background: linear-gradient(135deg, #5a6fd8, #6a4c93);
+    color: white;
+}
+
+/* 响应式下载按钮 */
+@media (max-width: 768px) {
+    .download-options {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .download-btn {
+        width: 100%;
+        max-width: 250px;
+    }
+>>>>>>> 1116a7b285a79e4438e5efe62188206fc307363b
 }
